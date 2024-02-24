@@ -24,6 +24,8 @@ contract Vault {
 
         require(msg.sender != address(0), "address zero cant call this func");
 
+        require(msg.sender.balance >= msg.value, "you dont have the funds to offer grant");
+
         uint256 _cliamTime = block.timestamp + 1 days;
 
         isBeneficiary[_beneficiary][grantId] = true;
@@ -46,6 +48,15 @@ contract Vault {
         payable(msg.sender).transfer(grants[_grantId].amount);
 
         grants[_grantId].isCliamed = true;
+    }
+
+    function getGrantDetails (uint256 _grantId) external view returns (Grant memory) {
+
+        return grants[_grantId];
+    }
+
+    function getContractBalance () external view returns (uint256){
+        return address(this).balance ;
     }
 
     receive() external payable { }
